@@ -1,24 +1,27 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { Tabs } from 'expo-router';
+import { useTheme } from '../../theme';
 
 export default function TabLayout() {
+  const theme = useTheme();
+  
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#3B82F6',
-        tabBarInactiveTintColor: '#6B7280',
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.mutedForeground,
         tabBarStyle: {
-          backgroundColor: 'white',
+          backgroundColor: theme.colors.card,
           borderTopWidth: 1,
-          borderTopColor: '#E5E7EB',
+          borderTopColor: theme.colors.border,
         },
         headerStyle: {
-          backgroundColor: '#3B82F6',
+          backgroundColor: theme.colors.primary,
         },
-        headerTintColor: 'white',
+        headerTintColor: theme.colors.primaryForeground,
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: theme.typography.fontWeight.bold,
         },
       }}
     >
@@ -29,6 +32,17 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Text style={{ fontSize: 20 }}>
               {focused ? '🏠' : '🏡'}
+            </Text>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="showcase"
+        options={{
+          title: 'UI Showcase',
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontSize: 20 }}>
+              {focused ? '🎨' : '🖌️'}
             </Text>
           ),
         }}

@@ -1,46 +1,93 @@
-import { Text, View, Pressable, ScrollView } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import { Link } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { LogoutButton } from '../../components/LogoutButton';
+import { Button } from '../../components/Button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/Card';
+import { Alert, AlertTitle, AlertDescription } from '../../components/Alert';
+import { useTheme } from '../../theme';
 
 export default function AboutScreen() {
   const { user } = useAuth();
+  const theme = useTheme();
 
   return (
-    <ScrollView className="flex-1 bg-white">
-      <View className="flex-1 items-center justify-center p-6">
-        <Text className="text-3xl font-bold mb-4 text-gray-900">About</Text>
-        <Text className="text-base text-gray-600 text-center mb-6">
-          This is an example of file-based routing with Expo Router and NativeWind CSS.
-        </Text>
+    <ScrollView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <View style={{ padding: theme.spacing[6] }}>
         
-        <View className="bg-gray-50 p-4 rounded-xl mb-6 w-full max-w-sm">
-          <Text className="text-lg font-semibold mb-2 text-gray-900">User Information</Text>
-          <Text className="text-gray-700">Username: {user?.username}</Text>
-          <Text className="text-gray-700">Email: {user?.email || 'Not provided'}</Text>
-          <Text className="text-gray-700">User ID: {user?.id}</Text>
+        {/* Header */}
+        <View style={{ alignItems: 'center', marginBottom: theme.spacing[8] }}>
+          <Text style={{
+            fontSize: theme.typography['3xl'],
+            fontWeight: theme.typography.fontWeight.bold,
+            color: theme.colors.foreground,
+            marginBottom: theme.spacing[2]
+          }}>
+            About
+          </Text>
+          <Text style={{
+            fontSize: theme.typography.base,
+            color: theme.colors.mutedForeground,
+            textAlign: 'center'
+          }}>
+            Learn more about this React Native Expo app with shadcn/ui theme
+          </Text>
         </View>
         
-        <View className="w-full max-w-sm space-y-4">
-          <Link href="/" asChild>
-            <Pressable className="bg-blue-500 px-6 py-3 rounded-lg active:bg-blue-600">
-              <Text className="text-white text-base font-semibold text-center">Go back to Home</Text>
-            </Pressable>
-          </Link>
-          
-          <View className="flex-row justify-center mt-6">
+        {/* User Information Card */}
+        <Card style={{ marginBottom: theme.spacing[6] }}>
+          <CardHeader>
+            <CardTitle>User Information</CardTitle>
+            <CardDescription>
+              Your current session details
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <View style={{ gap: theme.spacing[2] }}>
+              <Text style={{ color: theme.colors.foreground, fontSize: theme.typography.sm }}>
+                <Text style={{ fontWeight: theme.typography.fontWeight.medium }}>Username:</Text> {user?.username}
+              </Text>
+              <Text style={{ color: theme.colors.foreground, fontSize: theme.typography.sm }}>
+                <Text style={{ fontWeight: theme.typography.fontWeight.medium }}>Email:</Text> {user?.email || 'Not provided'}
+              </Text>
+              <Text style={{ color: theme.colors.foreground, fontSize: theme.typography.sm }}>
+                <Text style={{ fontWeight: theme.typography.fontWeight.medium }}>User ID:</Text> {user?.id}
+              </Text>
+            </View>
+          </CardContent>
+        </Card>
+        
+        {/* Features Alert */}
+        <Alert variant="success" style={{ marginBottom: theme.spacing[6] }}>
+          <AlertTitle>Features Implemented</AlertTitle>
+          <AlertDescription>
+            ✓ shadcn/ui theme system{"\n"}
+            ✓ Secure authentication with expo-secure-store{"\n"}
+            ✓ Form validation with react-hook-form & zod{"\n"}
+            ✓ Tab-based navigation{"\n"}
+            ✓ Modern UI components{"\n"}
+            ✓ Context-based state management
+          </AlertDescription>
+        </Alert>
+        
+        {/* Navigation Card */}
+        <Card>
+          <CardContent>
+            <View style={{ gap: theme.spacing[4] }}>
+              <Link href="/" asChild>
+                <Button variant="outline">Go back to Home</Button>
+              </Link>
+              
+              <Link href="/showcase" asChild>
+                <Button>View UI Showcase</Button>
+              </Link>
+            </View>
+          </CardContent>
+          <CardFooter>
             <LogoutButton />
-          </View>
-        </View>
+          </CardFooter>
+        </Card>
         
-        <View className="mt-8 p-4 bg-blue-50 rounded-xl w-full max-w-sm">
-          <Text className="text-sm font-semibold text-blue-900 mb-2">Features Implemented:</Text>
-          <Text className="text-sm text-blue-800">✓ Secure authentication with expo-secure-store</Text>
-          <Text className="text-sm text-blue-800">✓ Form validation with react-hook-form & zod</Text>
-          <Text className="text-sm text-blue-800">✓ Tab-based navigation</Text>
-          <Text className="text-sm text-blue-800">✓ NativeWind styling</Text>
-          <Text className="text-sm text-blue-800">✓ Context-based state management</Text>
-        </View>
       </View>
     </ScrollView>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { FormInputProps } from '../types/auth';
+import { useTheme } from '../theme';
 
 export const FormInput: React.FC<FormInputProps> = ({
   label,
@@ -15,21 +16,43 @@ export const FormInput: React.FC<FormInputProps> = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  const inputClasses = [
-    'border rounded-lg px-4 py-3 text-base mb-1',
-    isFocused ? 'border-blue-500' : error ? 'border-red-500' : 'border-gray-300',
-    'bg-white'
-  ].join(' ');
+  const theme = useTheme();
 
   return (
-    <View className="mb-4">
-      <Text className="text-gray-700 text-sm font-medium mb-2">{label}</Text>
-      <View className="relative">
+    <View style={{ marginBottom: theme.spacing[6] }}>
+      <Text style={{ 
+        color: theme.colors.foreground, 
+        fontSize: theme.typography.sm, 
+        fontWeight: theme.typography.fontWeight.medium, 
+        marginBottom: theme.spacing[2],
+        marginLeft: theme.spacing[1]
+      }}>
+        {label}
+      </Text>
+      <View style={{ position: 'relative' }}>
         <TextInput
-          className={inputClasses}
+          style={{
+            borderWidth: 1,
+            borderRadius: theme.borderRadius.md,
+            paddingHorizontal: theme.spacing[3],
+            paddingVertical: theme.spacing[3],
+            fontSize: theme.typography.sm,
+            fontWeight: theme.typography.fontWeight.normal,
+            color: theme.colors.foreground,
+            backgroundColor: theme.colors.background,
+            borderColor: error 
+              ? theme.colors.destructive 
+              : isFocused 
+                ? theme.colors.ring 
+                : theme.colors.border,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.05,
+            shadowRadius: 2,
+            elevation: 1,
+          }}
           placeholder={placeholder}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={theme.colors.mutedForeground}
           value={value}
           onChangeText={onChangeText}
           onFocus={() => setIsFocused(true)}
@@ -42,17 +65,32 @@ export const FormInput: React.FC<FormInputProps> = ({
         />
         {secureTextEntry && (
           <TouchableOpacity
-            className="absolute right-3 top-3"
+            style={{
+              position: 'absolute',
+              right: theme.spacing[3],
+              top: theme.spacing[3],
+              padding: theme.spacing[1],
+            }}
             onPress={() => setShowPassword(!showPassword)}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Text className="text-gray-500 text-base">
+            <Text style={{ color: theme.colors.mutedForeground, fontSize: theme.typography.base }}>
               {showPassword ? '🙈' : '👁️'}
             </Text>
           </TouchableOpacity>
         )}
       </View>
       {error && (
-        <Text className="text-red-600 text-sm mt-1">{error}</Text>
+        <View style={{ marginTop: theme.spacing[2] }}>
+          <Text style={{ 
+            color: theme.colors.destructive, 
+            fontSize: theme.typography.sm, 
+            marginLeft: theme.spacing[1],
+            fontWeight: theme.typography.fontWeight.medium
+          }}>
+            {error}
+          </Text>
+        </View>
       )}
     </View>
   );

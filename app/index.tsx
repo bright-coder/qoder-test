@@ -10,8 +10,8 @@ export default function IndexScreen() {
 
   // Redirect based on authentication status
   if (isAuthenticated) {
-    return <Redirect href=\"/(tabs)\" />;
+    return <Redirect href="/(tabs)" />;
   } else {
-    return <Redirect href=\"/login\" />;
+    return <Redirect href="/login" />;
   }
 }

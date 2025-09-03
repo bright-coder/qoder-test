@@ -44,9 +44,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (credentials: LoginCredentials) => {
     try {
+      console.log('AuthContext: Starting login process for:', credentials.username);
       setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
       
       const result = await AuthService.login(credentials);
+      console.log('AuthContext: Login result:', { success: result.success, hasUser: !!result.user, error: result.error });
       
       if (result.success && result.user) {
         setAuthState({
@@ -55,14 +57,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           isLoading: false,
           error: null,
         });
+        console.log('AuthContext: Login successful, user authenticated');
       } else {
         setAuthState(prev => ({
           ...prev,
           isLoading: false,
           error: result.error || 'Login failed',
         }));
+        console.log('AuthContext: Login failed:', result.error);
       }
     } catch (error) {
+      console.error('AuthContext: Login error:', error);
       setAuthState(prev => ({
         ...prev,
         isLoading: false,

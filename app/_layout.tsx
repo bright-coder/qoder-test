@@ -3,9 +3,11 @@ import React, { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
+import { ThemeProvider, useTheme } from '../theme';
 
 function RootLayoutNav() {
   const { isAuthenticated, isLoading } = useAuth();
+  const theme = useTheme();
   const segments = useSegments();
   const router = useRouter();
 
@@ -25,8 +27,13 @@ function RootLayoutNav() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 justify-center items-center bg-gray-50">
-        <ActivityIndicator size="large" color="#3B82F6" />
+      <View style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: theme.colors.background
+      }}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
@@ -57,8 +64,10 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <RootLayoutNav />
-    </AuthProvider>
+    <ThemeProvider isDark={false}>
+      <AuthProvider>
+        <RootLayoutNav />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

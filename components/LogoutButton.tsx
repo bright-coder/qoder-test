@@ -1,6 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Text, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
+import { Button } from './Button';
 
 export const LogoutButton: React.FC = () => {
   const { logout, user } = useAuth();
@@ -34,13 +35,12 @@ export const LogoutButton: React.FC = () => {
   }
 
   return (
-    <TouchableOpacity
-      className="bg-red-500 px-4 py-2 rounded-lg active:bg-red-600"
+    <Button
+      variant="destructive"
+      size="sm"
       onPress={handleLogout}
     >
-      <Text className="text-white text-sm font-semibold">
-        Sign Out
-      </Text>
-    </TouchableOpacity>
+      Sign Out
+    </Button>
   );
 };

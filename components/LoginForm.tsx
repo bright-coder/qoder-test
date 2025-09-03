@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { FormInput } from './FormInput';
+import { Button } from './Button';
+import { Alert, AlertDescription } from './Alert';
 import { LoginFormData } from '../types/auth';
+import { useTheme } from '../theme';
 
 // Validation schema
 const loginSchema = z.object({
@@ -28,13 +31,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   isLoading,
   error,
 }) => {
+  const theme = useTheme();
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isDirty },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    mode: 'onBlur',
+    mode: 'onChange', // Changed from 'onBlur' to 'onChange' for better UX
     defaultValues: {
       username: '',
       password: '',
@@ -42,22 +46,31 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   });
 
   const handleFormSubmit = async (data: LoginFormData) => {
-    await onSubmit(data);
+    console.log('Form submitted with data:', { username: data.username, password: '***' });
+    try {
+      await onSubmit(data);
+    } catch (error) {
+      console.error('Form submission error:', error);
+    }
   };
 
+  const handleButtonPress = () => {
+    console.log('Sign in button pressed!');
+    handleSubmit(handleFormSubmit)();
+  };
+
+  // Debug information
+  console.log('Form state:', { isValid, isDirty, errors: Object.keys(errors), isLoading });
+
   return (
-    <View className="bg-white p-6 rounded-xl shadow-sm mx-4">
-      <Text className="text-3xl font-bold text-gray-900 text-center mb-8">
-        Welcome Back
-      </Text>
-      
+    <View>
       {error && (
-        <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-          <Text className="text-red-700 text-sm text-center">{error}</Text>
-        </View>
+        <Alert variant="destructive" style={{ marginBottom: theme.spacing[4] }}>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
-      <View className="space-y-4">
+      <View style={{ gap: theme.spacing[4] }}>
         <Controller
           control={control}
           name="username"
@@ -92,36 +105,48 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         />
       </View>
 
-      <TouchableOpacity
-        className={`py-3 rounded-lg mb-4 mt-6 ${
-          isLoading || !isValid 
-            ? 'bg-gray-400' 
-            : 'bg-blue-600 active:bg-blue-700'
-        }`}
-        onPress={handleSubmit(handleFormSubmit)}
-        disabled={isLoading || !isValid}
+      <Button
+        onPress={handleButtonPress}
+        disabled={isLoading}
+        loading={isLoading}
+        style={{
+          marginBottom: theme.spacing[4],
+          marginTop: theme.spacing[4],
+        }}
       >
-        {isLoading ? (
-          <View className="flex-row items-center justify-center">
-            <ActivityIndicator color="white" size="small" />
-            <Text className="text-white text-center font-semibold text-base ml-2">
-              Signing in...
-            </Text>
-          </View>
-        ) : (
-          <Text className="text-white text-center font-semibold text-base">
-            Sign In
-          </Text>
-        )}
-      </TouchableOpacity>
+        Sign In
+      </Button>
 
-      <View className="mt-6 border-t border-gray-200 pt-4">
-        <Text className="text-gray-600 text-sm text-center mb-2">
-          Demo Accounts:
+      <View style={{
+        borderTopWidth: 1,
+        borderTopColor: theme.colors.border,
+        paddingTop: theme.spacing[4]
+      }}>
+        <Text style={{ 
+          color: theme.colors.mutedForeground, 
+          fontSize: theme.typography.sm, 
+          textAlign: 'center', 
+          marginBottom: theme.spacing[3], 
+          fontWeight: theme.typography.fontWeight.medium
+        }}>
+          Demo Accounts
         </Text>
-        <Text className="text-xs text-gray-500 text-center">
-          admin/password123 • user1/123456 • demo/demo
-        </Text>
+        <View style={{
+          backgroundColor: theme.colors.muted,
+          borderRadius: theme.borderRadius.md,
+          padding: theme.spacing[3]
+        }}>
+          <Text style={{ 
+            fontSize: theme.typography.xs, 
+            color: theme.colors.mutedForeground, 
+            textAlign: 'center', 
+            lineHeight: theme.typography.lineHeight.relaxed * theme.typography.xs
+          }}>
+            <Text style={{ fontWeight: theme.typography.fontWeight.medium, color: theme.colors.foreground }}>admin</Text> / password123{"\n"}
+            <Text style={{ fontWeight: theme.typography.fontWeight.medium, color: theme.colors.foreground }}>user1</Text> / 123456{"\n"}
+            <Text style={{ fontWeight: theme.typography.fontWeight.medium, color: theme.colors.foreground }}>demo</Text> / demo
+          </Text>
+        </View>
       </View>
     </View>
   );
