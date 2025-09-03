@@ -81,6 +81,10 @@ export default function AboutScreen() {
               <Link href="/showcase" asChild>
                 <Button>View UI Showcase</Button>
               </Link>
+              
+              <Link href="/products" asChild>
+                <Button variant="secondary">Manage Products</Button>
+              </Link>
             </View>
           </CardContent>
           <CardFooter>

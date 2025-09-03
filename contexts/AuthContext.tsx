@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { AuthContextType, AuthState, LoginCredentials } from '../types/auth';
+import { UserRole, Permission, RBACUser } from '../types/rbac';
 import { AuthService } from '../services/authService';
+import { PermissionService } from '../services/permissionService';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -100,11 +102,58 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setAuthState(prev => ({ ...prev, error: null }));
   };
 
+  // RBAC Helper Functions
+  const hasRole = (role: UserRole): boolean => {
+    if (!authState.user) return false;
+    return PermissionService.hasRole(authState.user as RBACUser, role).hasPermission;
+  };
+
+  const hasPermission = (permission: Permission): boolean => {
+    if (!authState.user) return false;
+    return PermissionService.hasPermission(authState.user as RBACUser, permission).hasPermission;
+  };
+
+  const hasAnyPermission = (permissions: Permission[]): boolean => {
+    if (!authState.user) return false;
+    return PermissionService.hasAnyPermission(authState.user as RBACUser, permissions).hasPermission;
+  };
+
+  const hasAllPermissions = (permissions: Permission[]): boolean => {
+    if (!authState.user) return false;
+    return PermissionService.hasAllPermissions(authState.user as RBACUser, permissions).hasPermission;
+  };
+
+  const canAccess = (requiredRole?: UserRole, requiredPermissions?: Permission[]): boolean => {
+    if (!authState.user) return false;
+    
+    return PermissionService.canAccess(authState.user as RBACUser, {
+      requiredRole,
+      requiredPermissions
+    }).hasPermission;
+  };
+
+  const getUserPermissions = (): Permission[] => {
+    if (!authState.user) return [];
+    return PermissionService.getEffectivePermissions(authState.user as RBACUser);
+  };
+
+  const getRoleLevel = (): number => {
+    if (!authState.user) return 0;
+    return PermissionService.getRoleLevel(authState.user.role);
+  };
+
   const value: AuthContextType = {
     ...authState,
     login,
     logout,
     clearError,
+    hasRole,
+    hasPermission,
+    hasAnyPermission,
+    hasAllPermissions,
+    canAccess,
+    getUserPermissions,
+    getRoleLevel,
   };
 
   return (

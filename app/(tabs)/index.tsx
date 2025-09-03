@@ -32,8 +32,16 @@ export default function HomeScreen() {
                 <Button variant="outline">Go to About</Button>
               </Link>
               
+              <Link href="/rbac-demo" asChild>
+                <Button variant="outline">RBAC Demo</Button>
+              </Link>
+              
               <Link href="/showcase" asChild>
                 <Button>View UI Showcase</Button>
+              </Link>
+              
+              <Link href="/products" asChild>
+                <Button variant="secondary">Manage Products</Button>
               </Link>
               
               <View style={{ alignItems: 'center', marginTop: theme.spacing[4] }}>

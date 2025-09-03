@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text } from 'react-native';
 import { Tabs } from 'expo-router';
 import { useTheme } from '../../theme';
+import { HomeIcon, PackageIcon, GridIcon, InfoIcon } from '../../components/Icons';
 
 export default function TabLayout() {
   const theme = useTheme();
@@ -30,9 +30,24 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20 }}>
-              {focused ? '🏠' : '🏡'}
-            </Text>
+            <HomeIcon 
+              size={24} 
+              color={focused ? theme.colors.primary : theme.colors.mutedForeground}
+              focused={focused}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="products"
+        options={{
+          title: 'Products',
+          tabBarIcon: ({ focused }) => (
+            <PackageIcon 
+              size={24} 
+              color={focused ? theme.colors.primary : theme.colors.mutedForeground}
+              focused={focused}
+            />
           ),
         }}
       />
@@ -41,9 +56,11 @@ export default function TabLayout() {
         options={{
           title: 'UI Showcase',
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20 }}>
-              {focused ? '🎨' : '🖌️'}
-            </Text>
+            <GridIcon 
+              size={24} 
+              color={focused ? theme.colors.primary : theme.colors.mutedForeground}
+              focused={focused}
+            />
           ),
         }}
       />
@@ -52,9 +69,11 @@ export default function TabLayout() {
         options={{
           title: 'About',
           tabBarIcon: ({ focused }) => (
-            <Text style={{ fontSize: 20 }}>
-              {focused ? 'ℹ️' : '💡'}
-            </Text>
+            <InfoIcon 
+              size={24} 
+              color={focused ? theme.colors.primary : theme.colors.mutedForeground}
+              focused={focused}
+            />
           ),
         }}
       />

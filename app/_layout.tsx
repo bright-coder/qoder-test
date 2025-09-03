@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
+import { ProductProvider } from '../contexts/ProductContext';
 import { ThemeProvider, useTheme } from '../theme';
 
 function RootLayoutNav() {
@@ -15,9 +16,12 @@ function RootLayoutNav() {
     if (isLoading) return;
 
     const inAuthGroup = segments[0] === 'login';
+    const inProductGroup = segments[0] === 'products' || 
+                          segments[0] === 'create-product' || 
+                          segments[0] === 'update-product';
 
     if (!isAuthenticated && !inAuthGroup) {
-      // Redirect to login if not authenticated
+      // Redirect to login if not authenticated and trying to access protected routes
       router.replace('/login');
     } else if (isAuthenticated && inAuthGroup) {
       // Redirect to main app if authenticated
@@ -58,6 +62,24 @@ function RootLayoutNav() {
           headerShown: false 
         }} 
       />
+      <Stack.Screen 
+        name="products" 
+        options={{ 
+          headerShown: false 
+        }} 
+      />
+      <Stack.Screen 
+        name="create-product" 
+        options={{ 
+          headerShown: false 
+        }} 
+      />
+      <Stack.Screen 
+        name="update-product" 
+        options={{ 
+          headerShown: false 
+        }} 
+      />
     </Stack>
   );
 }
@@ -66,7 +88,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider isDark={false}>
       <AuthProvider>
-        <RootLayoutNav />
+        <ProductProvider>
+          <RootLayoutNav />
+        </ProductProvider>
       </AuthProvider>
     </ThemeProvider>
   );

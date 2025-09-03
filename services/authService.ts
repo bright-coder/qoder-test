@@ -1,33 +1,79 @@
 import * as SecureStore from 'expo-secure-store';
 import { AuthResult, LoginCredentials, User } from '../types/auth';
+import { UserRole, Permission } from '../types/rbac';
 
 const STORAGE_KEY = 'user_credentials';
 const USER_KEY = 'user_data';
 
-// Mock user database for demonstration
+// Mock user database with comprehensive role assignments
 const mockUsers: { [key: string]: { password: string; user: User } } = {
-  'admin': {
-    password: 'password123',
+  'superadmin': {
+    password: 'super123',
     user: {
       id: '1',
+      username: 'superadmin',
+      email: 'superadmin@example.com',
+      role: UserRole.SUPER_ADMIN,
+      roleAssignedAt: new Date('2024-01-01'),
+      roleAssignedBy: 'system'
+    }
+  },
+  'admin': {
+    password: 'admin123',
+    user: {
+      id: '2',
       username: 'admin',
-      email: 'admin@example.com'
+      email: 'admin@example.com',
+      role: UserRole.ADMIN,
+      roleAssignedAt: new Date('2024-01-15'),
+      roleAssignedBy: 'superadmin'
+    }
+  },
+  'moderator': {
+    password: 'mod123',
+    user: {
+      id: '3',
+      username: 'moderator',
+      email: 'moderator@example.com',
+      role: UserRole.MODERATOR,
+      customPermissions: [Permission.ADVANCED_ANALYTICS], // Extra permission
+      roleAssignedAt: new Date('2024-02-01'),
+      roleAssignedBy: 'admin'
     }
   },
   'user1': {
     password: '123456',
     user: {
-      id: '2',
+      id: '4',
       username: 'user1',
-      email: 'user1@example.com'
+      email: 'user1@example.com',
+      role: UserRole.USER,
+      roleAssignedAt: new Date('2024-02-15'),
+      roleAssignedBy: 'admin'
     }
   },
   'demo': {
     password: 'demo',
     user: {
-      id: '3',
+      id: '5',
       username: 'demo',
-      email: 'demo@example.com'
+      email: 'demo@example.com',
+      role: UserRole.USER,
+      customPermissions: [Permission.PRODUCT_CREATE], // Demo user with extra create permission
+      roleAssignedAt: new Date('2024-03-01'),
+      roleAssignedBy: 'admin'
+    }
+  },
+  'restricted': {
+    password: 'restricted123',
+    user: {
+      id: '6',
+      username: 'restricted',
+      email: 'restricted@example.com',
+      role: UserRole.MODERATOR,
+      deniedPermissions: [Permission.CONTENT_DELETE], // Moderator but can't delete content
+      roleAssignedAt: new Date('2024-03-10'),
+      roleAssignedBy: 'admin'
     }
   }
 };
