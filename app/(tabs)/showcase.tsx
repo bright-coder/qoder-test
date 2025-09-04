@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import { UIShowcase } from '../../components/UIShowcase';
-import { IconShowcase } from '../../components/IconShowcase';
-import { Button } from '../../components/Button';
+import { VectorIconsDemo } from '../../components/VectorIconsDemo';
+import { IconButton } from '../../components/IconButton';
 import { useTheme } from '../../theme';
 
 export default function ShowcaseScreen() {
-  const [activeTab, setActiveTab] = useState<'components' | 'icons'>('components');
+  const [activeTab, setActiveTab] = useState<'components' | 'vector-icons'>('components');
   const theme = useTheme();
 
   return (
@@ -20,7 +20,7 @@ export default function ShowcaseScreen() {
         paddingHorizontal: theme.spacing[4],
         paddingTop: theme.spacing[2]
       }}>
-        <Button
+        <IconButton
           variant={activeTab === 'components' ? 'default' : 'ghost'}
           size="sm"
           onPress={() => setActiveTab('components')}
@@ -28,21 +28,31 @@ export default function ShowcaseScreen() {
             marginRight: theme.spacing[2],
             borderRadius: theme.borderRadius.full
           }}
+          iconName="widgets"
+          iconFamily="MaterialIcons"
+          iconPosition="left"
         >
           Components
-        </Button>
-        <Button
-          variant={activeTab === 'icons' ? 'default' : 'ghost'}
+        </IconButton>
+        <IconButton
+          variant={activeTab === 'vector-icons' ? 'default' : 'ghost'}
           size="sm"
-          onPress={() => setActiveTab('icons')}
+          onPress={() => setActiveTab('vector-icons')}
           style={{ borderRadius: theme.borderRadius.full }}
+          iconName="star"
+          iconFamily="MaterialIcons"
+          iconPosition="left"
         >
-          Icons
-        </Button>
+          Vector Icons
+        </IconButton>
       </View>
       
       {/* Content */}
-      {activeTab === 'components' ? <UIShowcase /> : <IconShowcase />}
+      {activeTab === 'components' ? (
+        <UIShowcase />
+      ) : (
+        <VectorIconsDemo />
+      )}
     </View>
   );
 }

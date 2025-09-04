@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { FormInput } from './FormInput';
 import { Select, SelectOption } from './Select';
-import { Button } from './Button';
+import { IconButton } from './IconButton';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './Card';
 import { Alert, AlertDescription } from './Alert';
 import { ProductFormData, PRODUCT_SIZES, PRODUCT_BRANDS, Product } from '../types/product';
@@ -320,15 +320,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       SKU
                     </Text>
                     {onGenerateSku && (
-                      <Button
+                      <IconButton
                         variant="ghost"
                         size="sm"
                         onPress={handleGenerateSku}
                         disabled={!watchedName || !watchedBrand || isGeneratingSku}
                         loading={isGeneratingSku}
+                        iconName="auto-fix-high"
+                        iconFamily="MaterialIcons"
+                        iconPosition="left"
                       >
                         Generate
-                      </Button>
+                      </IconButton>
                     )}
                   </View>
                   
@@ -356,23 +359,29 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 marginTop: theme.spacing[6] 
               }}>
                 {onCancel && (
-                  <Button
+                  <IconButton
                     variant="outline"
                     onPress={onCancel}
                     disabled={isLoading}
                     style={{ flex: 1 }}
+                    iconName="close"
+                    iconFamily="MaterialIcons"
+                    iconPosition="left"
                   >
                     Cancel
-                  </Button>
+                  </IconButton>
                 )}
-                <Button
+                <IconButton
                   onPress={handleSubmit(handleFormSubmit)}
                   disabled={isLoading}
                   loading={isLoading}
                   style={{ flex: onCancel ? 1 : undefined }}
+                  iconName={mode === 'create' ? 'add' : 'save'}
+                  iconFamily="MaterialIcons"
+                  iconPosition="left"
                 >
                   {mode === 'create' ? 'Create Product' : 'Update Product'}
-                </Button>
+                </IconButton>
               </View>
             </View>
           </CardContent>

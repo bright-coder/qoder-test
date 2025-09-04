@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Link } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { LogoutButton } from '../../components/LogoutButton';
-import { Button } from '../../components/Button';
+import { IconButton } from '../../components/IconButton';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/Card';
 import { useTheme } from '../../theme';
 
@@ -29,19 +29,46 @@ export default function HomeScreen() {
           <CardContent>
             <View style={{ gap: theme.spacing[4] }}>
               <Link href="/about" asChild>
-                <Button variant="outline">Go to About</Button>
+                <IconButton 
+                  variant="outline"
+                  iconName="info-outline"
+                  iconFamily="MaterialIcons"
+                  iconPosition="left"
+                >
+                  Go to About
+                </IconButton>
               </Link>
               
               <Link href="/rbac-demo" asChild>
-                <Button variant="outline">RBAC Demo</Button>
+                <IconButton 
+                  variant="outline"
+                  iconName="shield-outline"
+                  iconFamily="Ionicons"
+                  iconPosition="left"
+                >
+                  RBAC Demo
+                </IconButton>
               </Link>
               
               <Link href="/showcase" asChild>
-                <Button>View UI Showcase</Button>
+                <IconButton
+                  iconName="palette"
+                  iconFamily="MaterialIcons"
+                  iconPosition="left"
+                >
+                  View UI Showcase
+                </IconButton>
               </Link>
               
               <Link href="/products" asChild>
-                <Button variant="secondary">Manage Products</Button>
+                <IconButton 
+                  variant="secondary"
+                  iconName="inventory"
+                  iconFamily="MaterialIcons"
+                  iconPosition="left"
+                >
+                  Manage Products
+                </IconButton>
               </Link>
               
               <View style={{ alignItems: 'center', marginTop: theme.spacing[4] }}>

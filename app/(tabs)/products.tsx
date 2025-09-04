@@ -4,12 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Link, useRouter } from 'expo-router';
 import { useProducts } from '../../contexts/ProductContext';
-import { Button } from '../../components/Button';
+import { IconButton } from '../../components/IconButton';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/Card';
 import { Alert as AlertComponent, AlertDescription } from '../../components/Alert';
 import { Product } from '../../types/product';
 import { useTheme } from '../../theme';
 import { withAuth } from '../../components/withAuth';
+import { Button } from '../../components/Button';
 
 const ProductCard: React.FC<{ 
   product: Product; 
@@ -89,20 +90,26 @@ const ProductCard: React.FC<{
             </View>
             
             <View style={{ flexDirection: 'row', gap: theme.spacing[2] }}>
-              <Button
+              <IconButton
                 variant="outline"
                 size="sm"
                 onPress={() => onEdit(product.id)}
+                iconName="edit"
+                iconFamily="MaterialIcons"
+                iconPosition="left"
               >
                 Edit
-              </Button>
-              <Button
+              </IconButton>
+              <IconButton
                 variant="destructive"
                 size="sm"
                 onPress={handleDelete}
+                iconName="delete"
+                iconFamily="MaterialIcons"
+                iconPosition="left"
               >
                 Delete
-              </Button>
+              </IconButton>
             </View>
           </View>
         </View>
@@ -171,7 +178,13 @@ function ProductsTabScreen() {
           </View>
           
           <Link href="/create-product" asChild>
-            <Button>Add Product</Button>
+            <IconButton
+              iconName="add"
+              iconFamily="MaterialIcons"
+              iconPosition="left"
+            >
+              Add Product
+            </IconButton>
           </Link>
         </View>
 

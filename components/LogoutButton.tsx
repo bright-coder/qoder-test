@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
-import { Button } from './Button';
+import { IconButton } from './IconButton';
 
 export const LogoutButton: React.FC = () => {
   const { logout, user } = useAuth();
@@ -35,12 +35,15 @@ export const LogoutButton: React.FC = () => {
   }
 
   return (
-    <Button
+    <IconButton
       variant="destructive"
       size="sm"
       onPress={handleLogout}
+      iconName="logout"
+      iconFamily="MaterialIcons"
+      iconPosition="left"
     >
       Sign Out
-    </Button>
+    </IconButton>
   );
 };

@@ -1,28 +1,18 @@
 // Export all components for easy importing
 export { Alert, AlertTitle, AlertDescription } from './Alert';
 export { Button } from './Button';
+export { IconButton } from './IconButton';
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card';
 export { FormInput } from './FormInput';
 export { LoginForm } from './LoginForm';
 export { ProductForm } from './ProductForm';
+export { CustomerForm } from './CustomerForm';
 export { Select } from './Select';
 export { UIShowcase } from './UIShowcase';
-export { IconShowcase } from './IconShowcase';
+export { VectorIconsDemo } from './VectorIconsDemo';
+export { VectorIconsExamples } from './VectorIconsExamples';
 export { ProtectedRoute } from './ProtectedRoute';
 export { withAuth, useAuthGuard } from './withAuth';
-
-// Export all icons
-export { 
-  HomeIcon, 
-  PackageIcon, 
-  PaletteIcon, 
-  InfoIcon, 
-  UserIcon, 
-  SettingsIcon, 
-  PlusIcon, 
-  SearchIcon, 
-  GridIcon 
-} from './Icons';
 
 // RBAC exports
 export * from '../hooks/useRBAC';

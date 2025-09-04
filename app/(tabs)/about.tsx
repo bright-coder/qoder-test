@@ -2,7 +2,7 @@ import { Text, View, ScrollView } from 'react-native';
 import { Link } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { LogoutButton } from '../../components/LogoutButton';
-import { Button } from '../../components/Button';
+import { IconButton } from '../../components/IconButton';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/Card';
 import { Alert, AlertTitle, AlertDescription } from '../../components/Alert';
 import { useTheme } from '../../theme';
@@ -75,15 +75,35 @@ export default function AboutScreen() {
           <CardContent>
             <View style={{ gap: theme.spacing[4] }}>
               <Link href="/" asChild>
-                <Button variant="outline">Go back to Home</Button>
+                <IconButton 
+                  variant="outline"
+                  iconName="home"
+                  iconFamily="Ionicons"
+                  iconPosition="left"
+                >
+                  Go back to Home
+                </IconButton>
               </Link>
               
               <Link href="/showcase" asChild>
-                <Button>View UI Showcase</Button>
+                <IconButton
+                  iconName="palette"
+                  iconFamily="MaterialIcons"
+                  iconPosition="left"
+                >
+                  View UI Showcase
+                </IconButton>
               </Link>
               
               <Link href="/products" asChild>
-                <Button variant="secondary">Manage Products</Button>
+                <IconButton 
+                  variant="secondary"
+                  iconName="inventory"
+                  iconFamily="MaterialIcons"
+                  iconPosition="left"
+                >
+                  Manage Products
+                </IconButton>
               </Link>
             </View>
           </CardContent>

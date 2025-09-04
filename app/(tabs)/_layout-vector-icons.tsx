@@ -3,7 +3,13 @@ import { Tabs } from 'expo-router';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../theme';
 
-export default function TabLayout() {
+/**
+ * Alternative Tab Layout using @expo/vector-icons
+ * 
+ * This demonstrates how to use @expo/vector-icons instead of custom SVG icons
+ * You can replace the existing _layout.tsx with this implementation
+ */
+export default function VectorIconTabLayout() {
   const theme = useTheme();
   
   return (
@@ -45,19 +51,6 @@ export default function TabLayout() {
           tabBarIcon: ({ focused, color, size }) => (
             <MaterialIcons 
               name={focused ? 'inventory' : 'inventory-2'} 
-              size={size} 
-              color={color} 
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="customers"
-        options={{
-          title: 'Customers',
-          tabBarIcon: ({ focused, color, size }) => (
-            <MaterialIcons 
-              name={focused ? 'people' : 'people-outline'} 
               size={size} 
               color={color} 
             />
