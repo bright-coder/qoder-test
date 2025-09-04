@@ -7,6 +7,7 @@ export { FormInput } from './FormInput';
 export { LoginForm } from './LoginForm';
 export { ProductForm } from './ProductForm';
 export { CustomerForm } from './CustomerForm';
+export { LocationPicker } from './LocationPicker';
 export { Select } from './Select';
 export { UIShowcase } from './UIShowcase';
 export { VectorIconsDemo } from './VectorIconsDemo';

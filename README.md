@@ -104,12 +104,15 @@ components/
 - **`/(tabs)/`** - Main app with tab navigation
   - **`index`** - Home dashboard with user information and navigation
   - **`products`** - Product management with CRUD operations
+  - **`customers`** - Customer management with CRUD operations
   - **`showcase`** - UI components and vector icons demo
   - **`about`** - App information and user details
 
 ### Dynamic Routes
-- **`/create-product`** - Product creation form
-- **`/update-product/[id]`** - Product editing form
+- **`/create-product`** - Product creation form (protected)
+- **`/update-product/[id]`** - Product editing form (protected)
+- **`/create-customer`** - Customer creation form (protected)
+- **`/update-customer/[id]`** - Customer editing form (protected)
 - **`/rbac-demo`** - Role-based access control demonstration
 
 ### Route Protection
@@ -257,19 +260,22 @@ eas build --platform ios
 
 ```
 ├── app/                    # Expo Router pages
-│   ├── (protected)/        # Auth-protected route group
 │   ├── (tabs)/            # Tab navigation group
 │   │   ├── _layout.tsx    # Tab layout with vector icons
 │   │   ├── index.tsx      # Home dashboard
 │   │   ├── products.tsx   # Product management
+│   │   ├── customers.tsx  # Customer management
 │   │   ├── showcase.tsx   # UI/Icon showcase
 │   │   └── about.tsx      # About page
 │   ├── update-product/
 │   │   └── [id].tsx       # Dynamic product edit route
+│   ├── update-customer/
+│   │   └── [id].tsx       # Dynamic customer edit route
 │   ├── _layout.tsx        # Root layout with theme provider
 │   ├── index.tsx          # Initial redirect
 │   ├── login.tsx          # Authentication screen
-│   ├── create-product.tsx # Product creation
+│   ├── create-product.tsx # Product creation (protected)
+│   ├── create-customer.tsx # Customer creation (protected)
 │   ├── rbac-demo.tsx      # RBAC demonstration
 │   └── unauthorized.tsx   # Access denied page
 ├── components/            # Reusable UI components

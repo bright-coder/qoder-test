@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { FormInput } from './FormInput';
 import { IconButton } from './IconButton';
+import { LocationPicker } from './LocationPicker';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './Card';
 import { Alert, AlertDescription } from './Alert';
 import { CustomerFormData, Customer } from '../types/customer';
@@ -65,6 +66,8 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
     control,
     handleSubmit,
     formState: { errors, isValid },
+    setValue,
+    watch,
   } = useForm<CustomerFormData>({
     resolver: zodResolver(customerSchema),
     mode: 'onChange',
@@ -79,6 +82,10 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
       companyName: initialData?.companyName || '',
     },
   });
+
+  // Watch latitude and longitude for LocationPicker
+  const watchedLatitude = watch('latitude');
+  const watchedLongitude = watch('longitude');
 
   const handleFormSubmit = async (data: CustomerFormData) => {
     try {
@@ -198,7 +205,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
                   color: theme.colors.foreground,
                   marginBottom: theme.spacing[4],
                 }}>
-                  Address Information
+                  Address & Location
                 </Text>
 
                 <Controller
@@ -215,43 +222,17 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
                   )}
                 />
 
-                <View style={{ 
-                  flexDirection: 'row', 
-                  gap: theme.spacing[3] 
-                }}>
-                  <View style={{ flex: 1 }}>
-                    <Controller
-                      control={control}
-                      name="latitude"
-                      render={({ field: { onChange, value } }) => (
-                        <FormInput
-                          label="Latitude"
-                          placeholder="e.g., 13.7563"
-                          value={value || ''}
-                          onChangeText={onChange}
-                          keyboardType="numeric"
-                          error={errors.latitude?.message}
-                        />
-                      )}
-                    />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Controller
-                      control={control}
-                      name="longitude"
-                      render={({ field: { onChange, value } }) => (
-                        <FormInput
-                          label="Longitude"
-                          placeholder="e.g., 100.5018"
-                          value={value || ''}
-                          onChangeText={onChange}
-                          keyboardType="numeric"
-                          error={errors.longitude?.message}
-                        />
-                      )}
-                    />
-                  </View>
-                </View>
+                {/* Location Picker with Map */}
+                <LocationPicker
+                  latitude={watchedLatitude}
+                  longitude={watchedLongitude}
+                  onLocationChange={(lat, lng) => {
+                    setValue('latitude', lat);
+                    setValue('longitude', lng);
+                  }}
+                  onLatitudeChange={(lat) => setValue('latitude', lat)}
+                  onLongitudeChange={(lng) => setValue('longitude', lng)}
+                />
               </View>
 
               {/* Business Information */}
