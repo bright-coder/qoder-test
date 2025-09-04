@@ -1,28 +1,30 @@
 import React from 'react';
 import { Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { IconButton } from './IconButton';
 
 export const LogoutButton: React.FC = () => {
+  const { t } = useTranslation();
   const { logout, user } = useAuth();
 
   const handleLogout = async () => {
     Alert.alert(
-      'Confirm Logout',
+      t('auth.logout'),
       'Are you sure you want to sign out?',
       [
         {
-          text: 'Cancel',
+          text: t('common.cancel'),
           style: 'cancel',
         },
         {
-          text: 'Sign Out',
+          text: t('auth.logout'),
           style: 'destructive',
           onPress: async () => {
             try {
               await logout();
             } catch (error) {
-              Alert.alert('Error', 'Failed to sign out. Please try again.');
+              Alert.alert(t('common.error'), 'Failed to sign out. Please try again.');
             }
           },
         },
@@ -43,7 +45,7 @@ export const LogoutButton: React.FC = () => {
       iconFamily="MaterialIcons"
       iconPosition="left"
     >
-      Sign Out
+      {t('auth.logout')}
     </IconButton>
   );
 };

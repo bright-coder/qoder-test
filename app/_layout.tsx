@@ -5,6 +5,8 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import { ProductProvider } from '../contexts/ProductContext';
 import { CustomerProvider } from '../contexts/CustomerContext';
+import { OrderProvider } from '../contexts/OrderContext';
+import { I18nProvider } from '../contexts/I18nContext';
 import { ThemeProvider, useTheme } from '../theme';
 
 function RootLayoutNav() {
@@ -102,6 +104,12 @@ function RootLayoutNav() {
           headerShown: false 
         }} 
       />
+      <Stack.Screen 
+        name="order-details" 
+        options={{ 
+          headerShown: false 
+        }} 
+      />
     </Stack>
   );
 }
@@ -109,13 +117,17 @@ function RootLayoutNav() {
 export default function RootLayout() {
   return (
     <ThemeProvider isDark={false}>
-      <AuthProvider>
-        <ProductProvider>
-          <CustomerProvider>
-            <RootLayoutNav />
-          </CustomerProvider>
-        </ProductProvider>
-      </AuthProvider>
+      <I18nProvider>
+        <AuthProvider>
+          <ProductProvider>
+            <CustomerProvider>
+              <OrderProvider>
+                <RootLayoutNav />
+              </OrderProvider>
+            </CustomerProvider>
+          </ProductProvider>
+        </AuthProvider>
+      </I18nProvider>
     </ThemeProvider>
   );
 }

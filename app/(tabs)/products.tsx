@@ -11,6 +11,7 @@ import { Product } from '../../types/product';
 import { useTheme } from '../../theme';
 import { withAuth } from '../../components/withAuth';
 import { Button } from '../../components/Button';
+import { useTranslation } from 'react-i18next';
 
 const ProductCard: React.FC<{ 
   product: Product; 
@@ -18,6 +19,7 @@ const ProductCard: React.FC<{
   onDelete: (id: string) => void;
 }> = ({ product, onEdit, onDelete }) => {
   const theme = useTheme();
+  const {t} =  useTranslation();
 
   const handleDelete = () => {
     Alert.alert(
@@ -78,14 +80,14 @@ const ProductCard: React.FC<{
                 color: theme.colors.mutedForeground,
                 marginBottom: theme.spacing[1]
               }}>
-                Cost: ${product.cost.toFixed(2)}
+                {t('common.cost')}: {product.cost.toFixed(2)}
               </Text>
               <Text style={{
                 fontSize: theme.typography.sm,
                 color: theme.colors.foreground,
                 fontWeight: theme.typography.fontWeight.medium
               }}>
-                Price: ${product.price.toFixed(2)}
+                {t('common.price')}: {product.price.toFixed(2)}
               </Text>
             </View>
             
@@ -98,7 +100,7 @@ const ProductCard: React.FC<{
                 iconFamily="MaterialIcons"
                 iconPosition="left"
               >
-                Edit
+                {t('common.edit')}
               </IconButton>
               <IconButton
                 variant="destructive"
@@ -108,7 +110,7 @@ const ProductCard: React.FC<{
                 iconFamily="MaterialIcons"
                 iconPosition="left"
               >
-                Delete
+                {t('common.delete')}
               </IconButton>
             </View>
           </View>
@@ -122,6 +124,7 @@ function ProductsTabScreen() {
   const { products, isLoading, error, loadProducts, deleteProduct } = useProducts();
   const router = useRouter();
   const theme = useTheme();
+  const {t} =  useTranslation();
   
   // Debug logging
   console.log('ProductsTabScreen - products:', products.length);
@@ -167,7 +170,7 @@ function ProductsTabScreen() {
               fontWeight: theme.typography.fontWeight.bold,
               color: theme.colors.foreground,
             }}>
-              Products
+              {t('products.title')}
             </Text>
             <Text style={{
               fontSize: theme.typography.sm,
@@ -183,7 +186,7 @@ function ProductsTabScreen() {
               iconFamily="MaterialIcons"
               iconPosition="left"
             >
-              Add Product
+              {t('products.addProduct')}
             </IconButton>
           </Link>
         </View>

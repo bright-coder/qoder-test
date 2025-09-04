@@ -12,6 +12,7 @@ import { Customer } from '../../types/customer';
 import { useTheme } from '../../theme';
 import { withAuth } from '../../components/withAuth';
 import { Button } from '../../components/Button';
+import { useTranslation } from 'react-i18next';
 
 const CustomerCard: React.FC<{ 
   customer: Customer; 
@@ -19,6 +20,7 @@ const CustomerCard: React.FC<{
   onDelete: (id: string) => void;
 }> = ({ customer, onEdit, onDelete }) => {
   const theme = useTheme();
+  const {t} = useTranslation();
 
   const handleDelete = () => {
     Alert.alert(
@@ -141,7 +143,7 @@ const CustomerCard: React.FC<{
               iconFamily="MaterialIcons"
               iconPosition="left"
             >
-              Edit
+              {t('common.edit')}
             </IconButton>
             <IconButton
               variant="destructive"
@@ -151,7 +153,7 @@ const CustomerCard: React.FC<{
               iconFamily="MaterialIcons"
               iconPosition="left"
             >
-              Delete
+              {t('common.delete')}
             </IconButton>
           </View>
         </View>
@@ -171,6 +173,7 @@ function CustomersTabScreen() {
   } = useCustomers();
   const router = useRouter();
   const theme = useTheme();
+  const {t} = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   
   useEffect(() => {
@@ -220,7 +223,7 @@ function CustomersTabScreen() {
               fontWeight: theme.typography.fontWeight.bold,
               color: theme.colors.foreground,
             }}>
-              Customers
+              {t('customers.title')}
             </Text>
             <Text style={{
               fontSize: theme.typography.sm,
@@ -236,7 +239,7 @@ function CustomersTabScreen() {
               iconFamily="MaterialIcons"
               iconPosition="left"
             >
-              Add Customer
+              {t('customers.addCustomer')}
             </IconButton>
           </Link>
         </View>

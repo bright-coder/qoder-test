@@ -14,6 +14,10 @@ export { VectorIconsDemo } from './VectorIconsDemo';
 export { VectorIconsExamples } from './VectorIconsExamples';
 export { ProtectedRoute } from './ProtectedRoute';
 export { withAuth, useAuthGuard } from './withAuth';
+export { OrderCard } from './OrderCard';
+export { OrderSummaryCard } from './OrderSummaryCard';
+export { OrderFilterModal } from './OrderFilterModal';
+export { LanguageSwitcher } from './LanguageSwitcher';
 
 // RBAC exports
 export * from '../hooks/useRBAC';

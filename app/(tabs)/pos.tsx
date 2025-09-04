@@ -2,14 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, Text, Alert, Modal, Animated, Easing } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { useTranslation } from 'react-i18next';
 import { useProducts } from '../../contexts/ProductContext';
 import { useCustomers } from '../../contexts/CustomerContext';
+import { useOrders } from '../../contexts/OrderContext';
 import { IconButton } from '../../components/IconButton';
 import { FormInput } from '../../components/FormInput';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/Card';
 import { Alert as AlertComponent, AlertDescription } from '../../components/Alert';
 import { Product } from '../../types/product';
 import { Customer } from '../../types/customer';
+import { PaymentMethod, CreateOrderData, OrderItem } from '../../types/order';
 import { useTheme } from '../../theme';
 import { withAuth } from '../../components/withAuth';
 
@@ -313,8 +316,10 @@ const CustomerModal: React.FC<{
 };
 
 function POSTabScreen() {
+  const { t } = useTranslation();
   const { products: allProducts, isLoading, error, loadProducts } = useProducts();
   const { customers, loadCustomers, searchCustomers } = useCustomers();
+  const { createOrder } = useOrders();
   const theme = useTheme();
   
   const [searchQuery, setSearchQuery] = useState('');
@@ -325,6 +330,8 @@ function POSTabScreen() {
   const [showDiscountModal, setShowDiscountModal] = useState(false);
   const [discountInput, setDiscountInput] = useState('');
   const [showCart, setShowCart] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   // Animation for cart count
   const cartCountAnim = useRef(new Animated.Value(1)).current;
@@ -416,34 +423,65 @@ function POSTabScreen() {
     setDiscountInput('');
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (cart.length === 0) {
       Alert.alert('Empty Cart', 'Please add products to cart before proceeding with payment');
       return;
     }
 
     const total = calculateTotal();
-    Alert.alert(
-      'Process Payment',
-      `Total: $${total.toFixed(2)}\nCustomer: ${selectedCustomer?.name || 'Walk-in Customer'}\n\nProceed with payment?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Process Payment',
-          onPress: () => {
-            // Here you would integrate with payment processing
-            Alert.alert('Payment Successful', 'Transaction completed successfully!', [
-              { text: 'OK', onPress: () => {
-                setCart([]);
-                setSelectedCustomer(null);
-                setDiscount(0);
-                setShowCart(false);
-              }}
-            ]);
+    
+    try {
+      // Create order items from cart
+      const orderItems: Omit<OrderItem, 'id'>[] = cart.map(item => ({
+        productId: item.product.id,
+        productName: item.product.name,
+        productSku: item.product.sku,
+        unitPrice: item.product.price,
+        quantity: item.quantity,
+        subtotal: item.product.price * item.quantity,
+        productBrand: item.product.brand,
+        productCategory: item.product.category,
+        productSize: item.product.size
+      }));
+
+      // Create order data
+      const orderData: CreateOrderData = {
+        items: orderItems,
+        customer: selectedCustomer ? {
+          id: selectedCustomer.id,
+          name: selectedCustomer.name,
+          phone: selectedCustomer.phone
+        } : undefined,
+        discountPercentage: discount,
+        paymentMethod: paymentMethod,
+        notes: undefined // You could add a notes field to the UI if needed
+      };
+
+      // Create the order
+      const newOrder = await createOrder(orderData);
+      
+      Alert.alert(
+        'Payment Successful',
+        `Order ${newOrder.orderNumber} completed successfully!\nTotal: $${total.toFixed(2)}`,
+        [
+          { 
+            text: 'OK', 
+            onPress: () => {
+              // Reset cart and customer selection
+              setCart([]);
+              setSelectedCustomer(null);
+              setDiscount(0);
+              setShowCart(false);
+              setPaymentMethod(PaymentMethod.CASH);
+            }
           }
-        }
-      ]
-    );
+        ]
+      );
+    } catch (error) {
+      console.error('Error creating order:', error);
+      Alert.alert('Error', 'Failed to process payment. Please try again.');
+    }
   };
 
   return (
@@ -466,7 +504,7 @@ function POSTabScreen() {
             fontWeight: theme.typography.fontWeight.bold,
             color: theme.colors.foreground,
           }}>
-            Point of Sale
+            {t('pos.title')}
           </Text>
           <View style={{ flexDirection: 'row', gap: theme.spacing[2] }}>
             <Animated.View style={{ transform: [{ scale: cartCountAnim }] }}>
@@ -477,7 +515,7 @@ function POSTabScreen() {
                 iconName="shopping-cart"
                 iconFamily="MaterialIcons"
               >
-                Cart ({cart.length})
+                {t('pos.cart')} ({cart.length})
               </IconButton>
             </Animated.View>
           </View>
@@ -685,12 +723,41 @@ function POSTabScreen() {
                   fontWeight: theme.typography.fontWeight.bold,
                   color: theme.colors.foreground 
                 }}>
-                  ${calculateTotal().toFixed(2)}
+                  {calculateTotal().toFixed(2)}
                 </Text>
               </View>
 
               {/* Action Buttons */}
               <View style={{ gap: theme.spacing[3] }}>
+                {/* Payment Method Selection */}
+                <View style={{
+                  flexDirection: 'row',
+                  gap: theme.spacing[2],
+                  marginBottom: theme.spacing[2]
+                }}>
+                  <Text style={{
+                    fontSize: theme.typography.sm,
+                    color: theme.colors.foreground,
+                    alignSelf: 'center',
+                    minWidth: 80
+                  }}>
+                    Payment:
+                  </Text>
+                  <View style={{ flex: 1, flexDirection: 'row', gap: theme.spacing[1] }}>
+                    {(['cash', 'qrcode', 'bank_transfer'] as PaymentMethod[]).map((method) => (
+                      <IconButton
+                        key={method}
+                        variant={paymentMethod === method ? "default" : "outline"}
+                        size="sm"
+                        onPress={() => setPaymentMethod(method)}
+                        style={{ flex: 1 }}
+                      >
+                        {t(`paymentMethod.${method}`)}
+                      </IconButton>
+                    ))}
+                  </View>
+                </View>
+                
                 <IconButton
                   variant="outline"
                   onPress={() => {

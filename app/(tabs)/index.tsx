@@ -1,18 +1,31 @@
 import { Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Link } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import { LogoutButton } from '../../components/LogoutButton';
 import { IconButton } from '../../components/IconButton';
+import { LanguageSwitcher } from '../../components/LanguageSwitcher';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/Card';
 import { useTheme } from '../../theme';
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const theme = useTheme();
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      {/* Language Switcher */}
+      <View style={{
+        position: 'absolute',
+        top: theme.spacing[12],
+        right: theme.spacing[4],
+        zIndex: 10,
+      }}>
+        <LanguageSwitcher showLabel={true} />
+      </View>
+      
       <View style={{ 
         flex: 1, 
         justifyContent: 'center', 
@@ -21,9 +34,9 @@ export default function HomeScreen() {
       }}>
         <Card style={{ marginBottom: theme.spacing[6] }}>
           <CardHeader>
-            <CardTitle>Welcome Back!</CardTitle>
+            <CardTitle>{t('home.welcomeBack')}</CardTitle>
             <CardDescription>
-              Hello, {user?.username}! You are successfully signed in to your account.
+              {t('home.welcomeMessage', { username: user?.username })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -35,7 +48,7 @@ export default function HomeScreen() {
                   iconFamily="MaterialIcons"
                   iconPosition="left"
                 >
-                  Go to About
+                  {t('home.goToAbout')}
                 </IconButton>
               </Link>
               
@@ -46,7 +59,7 @@ export default function HomeScreen() {
                   iconFamily="Ionicons"
                   iconPosition="left"
                 >
-                  RBAC Demo
+                  {t('home.rbacDemo')}
                 </IconButton>
               </Link>
               
@@ -56,7 +69,7 @@ export default function HomeScreen() {
                   iconFamily="MaterialIcons"
                   iconPosition="left"
                 >
-                  View UI Showcase
+                  {t('home.viewUiShowcase')}
                 </IconButton>
               </Link>
               
@@ -67,7 +80,7 @@ export default function HomeScreen() {
                   iconFamily="MaterialIcons"
                   iconPosition="left"
                 >
-                  Manage Products
+                  {t('home.manageProducts')}
                 </IconButton>
               </Link>
               

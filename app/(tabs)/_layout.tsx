@@ -1,9 +1,11 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../theme';
 
 export default function TabLayout() {
+  const { t } = useTranslation();
   const theme = useTheme();
   
   return (
@@ -28,7 +30,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: t('navigation.home'),
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons 
               name={focused ? 'home' : 'home-outline'} 
@@ -41,7 +43,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="products"
         options={{
-          title: 'Products',
+          title: t('navigation.products'),
           tabBarIcon: ({ focused, color, size }) => (
             <MaterialIcons 
               name={focused ? 'inventory' : 'inventory-2'} 
@@ -54,7 +56,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="pos"
         options={{
-          title: 'POS',
+          title: t('navigation.pos'),
           tabBarIcon: ({ focused, color, size }) => (
             <MaterialIcons 
               name={focused ? 'point-of-sale' : 'storefront'} 
@@ -67,7 +69,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="customers"
         options={{
-          title: 'Customers',
+          title: t('navigation.customers'),
           tabBarIcon: ({ focused, color, size }) => (
             <MaterialIcons 
               name={focused ? 'people' : 'people-outline'} 
@@ -78,9 +80,22 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="orders"
+        options={{
+          title: t('navigation.orders'),
+          tabBarIcon: ({ focused, color, size }) => (
+            <MaterialIcons 
+              name={focused ? 'receipt-long' : 'receipt'} 
+              size={size} 
+              color={color} 
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="showcase"
         options={{
-          title: 'UI Showcase',
+          title: t('navigation.uiShowcase'),
           tabBarIcon: ({ focused, color, size }) => (
             <MaterialIcons 
               name={focused ? 'dashboard' : 'dashboard-customize'} 
@@ -93,7 +108,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="about"
         options={{
-          title: 'About',
+          title: t('navigation.about'),
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons 
               name={focused ? 'information-circle' : 'information-circle-outline'} 
