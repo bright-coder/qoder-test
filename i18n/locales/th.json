@@ -111,7 +111,7 @@
     "processPayment": "ชำระเงิน",
     "paymentSuccessful": "ชำระเงินสำเร็จ",
     "paymentFailed": "ชำระเงินล้มเหลว",
-    "selectPaymentMethod": "เลือกวิธีการชำระเงิน",
+    "selectPaymentMethod": "วิธีชำระ",
     "cash": "เงินสด",
     "card": "บัตร",
     "qrcode": "คิวอาร์โค้ด",
@@ -121,7 +121,9 @@
     "discountPercentage": "เปอร์เซ็นต์ส่วนลด",
     "invalidDiscount": "ส่วนลดไม่ถูกต้อง",
     "enterDiscount": "กรอกเปอร์เซ็นต์ส่วนลด (0-100)",
-    "searchProducts": "ค้นหาสินค้าหรือสแกนบาร์โค้ด"
+    "searchProducts": "ค้นหาสินค้าหรือสแกนบาร์โค้ด",
+    "creditSale": "ค้างชำระ",
+    "confirmOrder": "ยืนยันคำสั่งซื้อ"
   },
   "orders": {
     "title": "คำสั่งซื้อ",

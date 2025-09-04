@@ -36,6 +36,7 @@ const ProductCard: React.FC<{
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const [showQuantity, setShowQuantity] = useState(false);
+  const { t } = useTranslation();
 
   // Pulse animation for cart quantity badge
   useEffect(() => {
@@ -158,7 +159,7 @@ const ProductCard: React.FC<{
                 iconFamily="MaterialIcons"
                 iconPosition="left"
               >
-                Add
+                {t('common.add')}
               </IconButton>
               
               {/* Animated quantity feedback */}
@@ -330,8 +331,9 @@ function POSTabScreen() {
   const [showDiscountModal, setShowDiscountModal] = useState(false);
   const [discountInput, setDiscountInput] = useState('');
   const [showCart, setShowCart] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.QRCODE);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [isCreditSale, setIsCreditSale] = useState(false);
 
   // Animation for cart count
   const cartCountAnim = useRef(new Animated.Value(1)).current;
@@ -423,6 +425,10 @@ function POSTabScreen() {
     setDiscountInput('');
   };
 
+  const handleCreditSale = () => {
+    setIsCreditSale(!isCreditSale);
+  };
+
   const handlePayment = async () => {
     if (cart.length === 0) {
       Alert.alert('Empty Cart', 'Please add products to cart before proceeding with payment');
@@ -454,16 +460,18 @@ function POSTabScreen() {
           phone: selectedCustomer.phone
         } : undefined,
         discountPercentage: discount,
-        paymentMethod: paymentMethod,
-        notes: undefined // You could add a notes field to the UI if needed
+        paymentMethod: isCreditSale ? PaymentMethod.CASH : paymentMethod, // Default to cash for credit sales
+        notes: isCreditSale ? 'Credit Sale - Payment Pending' : undefined
       };
 
       // Create the order
       const newOrder = await createOrder(orderData);
       
       Alert.alert(
-        'Payment Successful',
-        `Order ${newOrder.orderNumber} completed successfully!\nTotal: $${total.toFixed(2)}`,
+        isCreditSale ? 'Credit Sale Created' : 'Payment Successful',
+        isCreditSale 
+          ? `Order ${newOrder.orderNumber} created as credit sale!\nTotal: $${total.toFixed(2)}\nPayment pending - customer will pay later.`
+          : `Order ${newOrder.orderNumber} completed successfully!\nTotal: $${total.toFixed(2)}`,
         [
           { 
             text: 'OK', 
@@ -474,6 +482,7 @@ function POSTabScreen() {
               setDiscount(0);
               setShowCart(false);
               setPaymentMethod(PaymentMethod.CASH);
+              setIsCreditSale(false);
             }
           }
         ]
@@ -507,6 +516,18 @@ function POSTabScreen() {
             {t('pos.title')}
           </Text>
           <View style={{ flexDirection: 'row', gap: theme.spacing[2] }}>
+            <IconButton
+              variant="outline"
+              size="sm"
+              onPress={() => {
+                setShowDiscountModal(true);
+                setDiscountInput(discount.toString());
+              }}
+              iconName="local-offer"
+              iconFamily="MaterialIcons"
+            >
+              Discount {discount > 0 ? `(${discount}%)` : ''}
+            </IconButton>
             <Animated.View style={{ transform: [{ scale: cartCountAnim }] }}>
               <IconButton
                 variant={cart.length > 0 ? "default" : "outline"}
@@ -733,7 +754,8 @@ function POSTabScreen() {
                 <View style={{
                   flexDirection: 'row',
                   gap: theme.spacing[2],
-                  marginBottom: theme.spacing[2]
+                  marginBottom: theme.spacing[2],
+                  display: isCreditSale ? 'none': undefined
                 }}>
                   <Text style={{
                     fontSize: theme.typography.sm,
@@ -741,7 +763,7 @@ function POSTabScreen() {
                     alignSelf: 'center',
                     minWidth: 80
                   }}>
-                    Payment:
+                    {t('pos.selectPaymentMethod')}:
                   </Text>
                   <View style={{ flex: 1, flexDirection: 'row', gap: theme.spacing[1] }}>
                     {(['cash', 'qrcode', 'bank_transfer'] as PaymentMethod[]).map((method) => (
@@ -759,26 +781,24 @@ function POSTabScreen() {
                 </View>
                 
                 <IconButton
-                  variant="outline"
-                  onPress={() => {
-                    setShowDiscountModal(true);
-                    setDiscountInput(discount.toString());
-                  }}
-                  iconName="local-offer"
+                  variant={isCreditSale ? "default" : "outline"}
+                  onPress={handleCreditSale}
+                  iconName="credit-card"
                   iconFamily="MaterialIcons"
                   iconPosition="left"
                 >
-                  Apply Discount ({discount > 0 ? `${discount}%` : 'None'})
+                  {t('pos.creditSale')}
                 </IconButton>
+
                 <IconButton
                   variant="default"
                   onPress={handlePayment}
                   disabled={cart.length === 0}
-                  iconName="payment"
+                  iconName={isCreditSale ? "assignment" : "payment"}
                   iconFamily="MaterialIcons"
                   iconPosition="left"
                 >
-                  Process Payment
+                  {isCreditSale ? t('pos.confirmOrder') : t('pos.processPayment')}
                 </IconButton>
               </View>
             </View>
@@ -810,25 +830,25 @@ function POSTabScreen() {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          padding: theme.spacing[4],
+          padding: 16,
         }}>
           <View style={{
             backgroundColor: theme.colors.card,
-            padding: theme.spacing[6],
-            borderRadius: theme.borderRadius.lg,
+            padding: 24,
+            borderRadius: 8,
             width: '100%',
             maxWidth: 400,
           }}>
             <Text style={{
-              fontSize: theme.typography.lg,
-              fontWeight: theme.typography.fontWeight.bold,
+              fontSize: 18,
+              fontWeight: '700',
               color: theme.colors.foreground,
-              marginBottom: theme.spacing[4],
+              marginBottom: 16,
               textAlign: 'center',
             }}>
               Apply Discount
             </Text>
-            <View style={{ marginBottom: theme.spacing[4] }}>
+            <View style={{ marginBottom: 16 }}>
               <FormInput
                 label="Discount Percentage"
                 placeholder="Enter discount (0-100)"
@@ -837,7 +857,7 @@ function POSTabScreen() {
                 keyboardType="numeric"
               />
             </View>
-            <View style={{ flexDirection: 'row', gap: theme.spacing[3] }}>
+            <View style={{ flexDirection: 'row', gap: 12 }}>
               <IconButton
                 variant="outline"
                 onPress={() => setShowDiscountModal(false)}

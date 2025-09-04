@@ -111,7 +111,7 @@
     "processPayment": "Process Payment",
     "paymentSuccessful": "Payment Successful",
     "paymentFailed": "Payment Failed",
-    "selectPaymentMethod": "Select Payment Method",
+    "selectPaymentMethod": "Payment",
     "cash": "Cash",
     "card": "Card",
     "digitalWallet": "Digital Wallet",
@@ -121,7 +121,9 @@
     "discountPercentage": "Discount Percentage",
     "invalidDiscount": "Invalid Discount",
     "enterDiscount": "Enter discount percentage (0-100)",
-    "searchProducts": "Search products or scan barcode"
+    "searchProducts": "Search products or scan barcode",
+    "creditSale": "Credit",
+    "confirmOrder": "Confirm Order"
   },
   "orders": {
     "title": "Orders",
