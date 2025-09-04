@@ -52,6 +52,19 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="pos"
+        options={{
+          title: 'POS',
+          tabBarIcon: ({ focused, color, size }) => (
+            <MaterialIcons 
+              name={focused ? 'point-of-sale' : 'storefront'} 
+              size={size} 
+              color={color} 
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="customers"
         options={{
           title: 'Customers',

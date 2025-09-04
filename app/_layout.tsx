@@ -96,6 +96,12 @@ function RootLayoutNav() {
           headerShown: false 
         }} 
       />
+      <Stack.Screen 
+        name="pos" 
+        options={{ 
+          headerShown: false 
+        }} 
+      />
     </Stack>
   );
 }
