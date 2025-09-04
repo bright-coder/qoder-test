@@ -603,7 +603,7 @@ function POSTabScreen() {
         </Card>
 
         {/* Search */}
-        <View style={{ marginBottom: theme.spacing[4] }}>
+        <View>
           <FormInput
             label="Search Products"
             placeholder="Search by name or barcode"
