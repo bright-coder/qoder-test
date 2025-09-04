@@ -169,7 +169,7 @@ class OrderServiceClass {
         discountPercentage: 5,
         discountAmount: 1.65,
         total: 31.34,
-        paymentMethod: PaymentMethod.DIGITAL_WALLET,
+        paymentMethod: PaymentMethod.QRCODE,
         paymentStatus: PaymentStatus.PENDING,
         notes: 'Customer will pick up tomorrow',
         createdAt: now,
