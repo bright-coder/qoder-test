@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Text, Alert, Modal, Animated, Easing } from 'react-native';
+import { View, ScrollView, Text, Alert, Modal, Animated, Easing, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
@@ -88,103 +88,130 @@ const ProductCard: React.FC<{
 
   return (
     <Animated.View style={[{ transform: [{ scale: scaleAnim }] }]}>
-      <Card style={{ marginBottom: theme.spacing[3] }}>
-        <CardContent>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <View style={{ flex: 1 }}>
+      <Card style={{ 
+        marginBottom: theme.spacing[1],
+        position: 'relative'
+      }}
+ 
+      >
+        <CardContent style={{ padding: theme.spacing[1] }}>
+          {/* Product Image with Overlay */}
+          <View style={{
+            width: '100%',
+            height: 200,
+            backgroundColor: theme.colors.muted,
+            borderRadius: theme.borderRadius.md,
+            marginBottom: theme.spacing[3],
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            {/* Product Image or Placeholder */}
+            {product.img ? (
+              <Image source={{ uri: product.img }} style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />
+            ) : (
               <Text style={{
-                fontSize: theme.typography.base,
-                fontWeight: theme.typography.fontWeight.medium,
-                color: theme.colors.foreground,
+                fontSize: 24,
+                color: theme.colors.mutedForeground,
+                fontWeight: theme.typography.fontWeight.bold
               }}>
+                {product.name.charAt(0).toUpperCase()}
+              </Text>
+            )}
+            
+            {/* Overlay with gradient background */}
+            <View style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              paddingHorizontal: theme.spacing[2],
+              paddingVertical: theme.spacing[1],
+            }}>
+              {/* Product Name */}
+              <Text style={{
+                fontSize: theme.typography.sm,
+                fontWeight: theme.typography.fontWeight.medium,
+                color: 'white',
+                textAlign: 'center',
+                marginBottom: theme.spacing[1],
+              }} numberOfLines={1}>
                 {product.name}
               </Text>
+              
+              {/* Product Price */}
               <Text style={{
-                fontSize: theme.typography.sm,
-                color: theme.colors.mutedForeground,
-                marginTop: theme.spacing[1],
+                fontSize: theme.typography.xl,
+                color: 'white',
+                fontWeight: theme.typography.fontWeight.bold,
+                textAlign: 'center',
               }}>
-                {product.category} • {product.size}kg • {product.brand.toUpperCase()}
-              </Text>
-              <Text style={{
-                fontSize: theme.typography.sm,
-                color: theme.colors.primary,
-                fontWeight: theme.typography.fontWeight.medium,
-                marginTop: theme.spacing[1],
-              }}>
-                ${product.price.toFixed(2)}
-              </Text>
-              <Text style={{
-                fontSize: theme.typography.xs,
-                color: theme.colors.mutedForeground,
-                backgroundColor: theme.colors.muted,
-                paddingHorizontal: theme.spacing[2],
-                paddingVertical: theme.spacing[1],
-                borderRadius: theme.borderRadius.sm,
-                alignSelf: 'flex-start',
-                marginTop: theme.spacing[1],
-              }}>
-                SKU: {product.sku}
+                {product.price.toFixed(2)}
               </Text>
             </View>
-            <View style={{ alignItems: 'center' }}>
-              {/* Cart quantity indicator */}
-              {cartQuantity > 0 && (
-                <Animated.View style={[
-                  {
-                    backgroundColor: theme.colors.primary,
-                    borderRadius: theme.borderRadius.full,
-                    minWidth: 24,
-                    height: 24,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: theme.spacing[2],
-                  },
-                  { transform: [{ scale: pulseAnim }] }
-                ]}>
-                  <Text style={{
-                    fontSize: theme.typography.xs,
-                    color: theme.colors.primaryForeground,
-                    fontWeight: theme.typography.fontWeight.bold,
-                  }}>
-                    {cartQuantity}
-                  </Text>
-                </Animated.View>
-              )}
-              <IconButton
-                variant={cartQuantity > 0 ? "default" : "outline"}
-                size="sm"
-                onPress={handleAddToCart}
-                iconName="add"
-                iconFamily="MaterialIcons"
-                iconPosition="left"
-              >
-                {t('common.add')}
-              </IconButton>
-              
-              {/* Animated quantity feedback */}
-              {showQuantity && (
-                <Animated.View style={{
+            
+            {/* Cart quantity badge */}
+            {cartQuantity > 0 && (
+              <Animated.View style={[
+                {
                   position: 'absolute',
-                  top: -10,
-                  right: 10,
+                  top: 8,
+                  right: 8,
                   backgroundColor: theme.colors.primary,
                   borderRadius: theme.borderRadius.full,
-                  paddingHorizontal: theme.spacing[2],
-                  paddingVertical: theme.spacing[1],
-                  opacity: showQuantity ? 1 : 0,
+                  minWidth: 20,
+                  height: 20,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                },
+                { transform: [{ scale: pulseAnim }] }
+              ]}>
+                <Text style={{
+                  fontSize: theme.typography.xs,
+                  color: theme.colors.primaryForeground,
+                  fontWeight: theme.typography.fontWeight.bold,
                 }}>
-                  <Text style={{
-                    fontSize: theme.typography.xs,
-                    color: theme.colors.primaryForeground,
-                    fontWeight: theme.typography.fontWeight.bold,
-                  }}>
-                    +1
-                  </Text>
-                </Animated.View>
-              )}
-            </View>
+                  {cartQuantity}
+                </Text>
+              </Animated.View>
+            )}
           </View>
+          
+          {/* Add to Cart Button */}
+          <IconButton
+            variant={cartQuantity > 0 ? "default" : "outline"}
+            size="sm"
+            onPress={handleAddToCart}
+            iconName="add"
+            iconFamily="MaterialIcons"
+            iconPosition="left"
+            style={{ width: '100%' }}
+          > {t('common.add')} </IconButton>
+          
+          {/* Animated quantity feedback */}
+          {showQuantity && (
+            <Animated.View style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: [{ translateX: -15 }, { translateY: -15 }],
+              backgroundColor: theme.colors.primary,
+              borderRadius: theme.borderRadius.full,
+              paddingHorizontal: theme.spacing[2],
+              paddingVertical: theme.spacing[1],
+              opacity: showQuantity ? 1 : 0,
+            }}>
+              <Text style={{
+                fontSize: theme.typography.xs,
+                color: theme.colors.primaryForeground,
+                fontWeight: theme.typography.fontWeight.bold,
+              }}>
+                +1
+              </Text>
+            </Animated.View>
+          )}
         </CardContent>
       </Card>
     </Animated.View>
@@ -544,19 +571,19 @@ function POSTabScreen() {
 
         {/* Customer Selection */}
         <Card style={{ marginBottom: theme.spacing[4] }}>
-          <CardHeader>
+          {/* <CardHeader>
             <CardTitle>Customer</CardTitle>
-          </CardHeader>
-          <CardContent>
+          </CardHeader> */}
+          <CardContent style={{padding: theme.spacing[3]}}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[3] }}>
               <View style={{ flex: 1 }}>
                 <Text style={{
                   fontSize: theme.typography.sm,
                   color: selectedCustomer ? theme.colors.foreground : theme.colors.mutedForeground,
-                  padding: theme.spacing[3],
+                  padding: theme.spacing[2],
                   backgroundColor: theme.colors.background,
-                  borderRadius: theme.borderRadius.md,
-                  borderWidth: 1,
+                  // borderRadius: theme.borderRadius.md,
+                  // borderWidth: 1,
                   borderColor: theme.colors.border,
                 }}>
                   {selectedCustomer ? `${selectedCustomer.name} (${selectedCustomer.phone})` : 'Walk-in Customer'}
@@ -569,7 +596,7 @@ function POSTabScreen() {
                 iconName="person"
                 iconFamily="MaterialIcons"
               >
-                Select
+                Customer
               </IconButton>
             </View>
           </CardContent>
@@ -592,20 +619,28 @@ function POSTabScreen() {
           </AlertComponent>
         )}
 
-        {/* Products List */}
-        {products.map(product => {
-          const cartItem = cart.find(item => item.product.id === product.id);
-          const cartQuantity = cartItem ? cartItem.quantity : 0;
-          
-          return (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onAddToCart={handleAddToCart}
-              cartQuantity={cartQuantity}
-            />
-          );
-        })}
+        {/* Products Grid */}
+        <View style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: theme.spacing[3],
+          justifyContent: 'space-between'
+        }}>
+          {products.map(product => {
+            const cartItem = cart.find(item => item.product.id === product.id);
+            const cartQuantity = cartItem ? cartItem.quantity : 0;
+            
+            return (
+              <View key={product.id} style={{ width: '48%' }}>
+                <ProductCard
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                  cartQuantity={cartQuantity}
+                />
+              </View>
+            );
+          })}
+        </View>
       </ScrollView>
 
       {/* Cart Modal */}
@@ -629,7 +664,7 @@ function POSTabScreen() {
                 fontWeight: theme.typography.fontWeight.bold,
                 color: theme.colors.foreground,
               }}>
-                Current Sale
+                {t('pos.title')}
               </Text>
               <IconButton
                 variant="ghost"
@@ -710,7 +745,7 @@ function POSTabScreen() {
                   textAlign: 'center',
                   padding: theme.spacing[4],
                 }}>
-                  Cart is empty
+                  {t('pos.emptyCart')}
                 </Text>
               )}
             </ScrollView>
@@ -722,8 +757,8 @@ function POSTabScreen() {
               paddingTop: theme.spacing[4]
             }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing[2] }}>
-                <Text style={{ color: theme.colors.foreground }}>Subtotal:</Text>
-                <Text style={{ color: theme.colors.foreground }}>${calculateSubtotal().toFixed(2)}</Text>
+                <Text style={{ color: theme.colors.foreground }}>{t('pos.subTotal')}:</Text>
+                <Text style={{ color: theme.colors.foreground }}>{calculateSubtotal().toFixed(2)}</Text>
               </View>
               {discount > 0 && (
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing[2] }}>
@@ -737,7 +772,7 @@ function POSTabScreen() {
                   fontWeight: theme.typography.fontWeight.bold,
                   color: theme.colors.foreground 
                 }}>
-                  Total:
+                  {t('pos.total')}:
                 </Text>
                 <Text style={{ 
                   fontSize: theme.typography.lg,

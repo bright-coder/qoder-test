@@ -123,7 +123,9 @@
     "enterDiscount": "Enter discount percentage (0-100)",
     "searchProducts": "Search products or scan barcode",
     "creditSale": "Credit",
-    "confirmOrder": "Confirm Order"
+    "confirmOrder": "Confirm Order",
+    "total": "Total",
+    "subTotal": "Subtotal"
   },
   "orders": {
     "title": "Orders",

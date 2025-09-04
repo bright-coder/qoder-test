@@ -102,7 +102,7 @@
     "walkInCustomer": "ลูกค้าทั่วไป"
   },
   "pos": {
-    "title": "จุดขาย",
+    "title": "หน้าขาย",
     "cart": "ตะกร้า",
     "addToCart": "เพิ่มในตะกร้า",
     "removeFromCart": "ลบจากตะกร้า",
@@ -123,7 +123,9 @@
     "enterDiscount": "กรอกเปอร์เซ็นต์ส่วนลด (0-100)",
     "searchProducts": "ค้นหาสินค้าหรือสแกนบาร์โค้ด",
     "creditSale": "ค้างชำระ",
-    "confirmOrder": "ยืนยันคำสั่งซื้อ"
+    "confirmOrder": "ยืนยันคำสั่งซื้อ",
+    "total": "ยอดสุทธิ",
+    "subTotal": "ยอดรวม"
   },
   "orders": {
     "title": "คำสั่งซื้อ",
